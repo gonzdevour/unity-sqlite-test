@@ -12,9 +12,8 @@ public class Event
     public string 歷史 { get; set; }
 }
 
-public class GameManager : MonoBehaviour
+public class Demo : MonoBehaviour
 {
-    public List<string> csvUrls;
     public CSVDownloader csvDownloader;
 
     private SQLiteManager dbManager;
@@ -29,7 +28,9 @@ public class GameManager : MonoBehaviour
     public IEnumerator Test()
     {
         // 下載所有列表中的csv，並依表單header和檔名各自加進db裡
-        yield return csvDownloader.DownloadAllCSV(csvUrls);
+        //yield return csvDownloader.DownloadAllCSV(csvDownloader.csvUrls);
+        // 不給值就直接使用csvDownloader.csvUrls
+        yield return csvDownloader.DownloadAllCSV();
         // 傳入db檔案連結，初始化dbManager
         dbManager = new SQLiteManager(Path.Combine(Application.persistentDataPath, "dynamicDatabase.db"));
         Db_PrintAll("events");

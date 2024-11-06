@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 public class CSVDownloader : MonoBehaviour
 {
+    public List<string> csvUrls;
     public CSVToSQLite csv2sq;
     public IEnumerator DownloadCSV(string csvUrl)
     {
@@ -37,19 +38,22 @@ public class CSVDownloader : MonoBehaviour
     }
 
     // 协程：并行下载所有文件并等待完成
-    public IEnumerator DownloadAllCSV(List<string> urls)
+    public IEnumerator DownloadAllCSV(List<string> urls = null) // 設定可選參數為 null
     {
+        // 如果沒有提供 urls 參數，則使用 csvUrls
+        List<string> urlsToDownload = urls ?? csvUrls;
+
         List<IEnumerator> downloadTasks = new();
 
-        foreach (string url in urls)
+        foreach (string url in urlsToDownload)
         {
             downloadTasks.Add(DownloadCSV(url));
         }
 
-        // 等待所有下载任务完成
+        // 等待所有下載任務完成
         foreach (var task in downloadTasks)
         {
-            yield return task; // 逐个等待所有任务完成
+            yield return task; // 逐個等待所有任務完成
         }
 
         Debug.Log("All csv downloaded.");
